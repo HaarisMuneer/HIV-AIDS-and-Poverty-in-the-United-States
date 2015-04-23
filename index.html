@@ -108,6 +108,8 @@
 			var statePaths;
 			var statesData;
 
+			var enrollcs
+
 			var states;
 
 			var state_ids = {};
@@ -248,48 +250,6 @@
 					});
 					
 				
-				/* Show enrollment color scale key on map */
-				
-				enrollcs = map_svg.append("g");
-				
-				enrollcs.append("text")
-					.text("Map Scale Description")
-					.attr("x", 50).attr("y", 600)
-					.attr("fill", "#777")
-					.attr("font-size", "12");
-				
-				for (var i = 0; i < 5; i++) {
-					var xpos = 50 + 30*i;
-					var ypos = 560;
-					
-					enrollcs.append("rect")
-						.attr("x", xpos).attr("y", ypos + 5)
-						.attr("height", 14).attr("width",30)
-						.attr("fill", unemployment_colors[i]);
-
-					var scaletext;
-					var scaletextcolor = (i % 2 == 0)? "#a7a7a7" : "#dfdfdf";
-					if (i == 0) {
-						scaletext = "0%";
-					}
-					else if (i < 5) {
-						scaletext = "0." + (i * 2) + "%";
-					}
-					else if (i == 5) {
-						scaletext = "1%";
-					}
-					else {
-						scaletext = (2 + 2 * (i - 6)) + "%";
-					}
-
-					enrollcs.append("text")
-						.text(scaletext)
-						.attr("x", xpos).attr("y", ypos)
-						.attr("fill", scaletextcolor)
-						.attr("font-size", 10)
-						.attr("dominant-baseline", "middle")
-						.attr("transform", "rotate(-60," + xpos + ", " + ypos + ")");
-				}
 				
 				//start by showing unemployment on map
 				color_states_unemployment();
@@ -300,13 +260,73 @@
 				
 			});
 
+			function add_color_scale (title, colors_array, minval, maxval, percentorraw) {
+				/* Show enrollment color scale key on map */
+
+				
+				if (enrollcs) {
+					d3.select("#color-scale-title").text(title);
+					//update colors
+					for (var i = 0; i < colors_array.length; i++) {
+						d3.select("#color-scale-rect-" + i)
+							.attr("fill", colors_array[i]);
+
+						var scaletext;
+						var scaletextcolor = (i % 2 == 0)? "#a7a7a7" : "#dfdfdf";
+						var delta = (maxval - minval) / colors_array.length;
+						var val = minval + i * delta;
+						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : numberWithCommas(val);
+						d3.select("#color-scale-label-"+i).text(scaletext);
+					}
+				}
+				else {
+
+					enrollcs = map_svg.append("g");
+					
+					enrollcs.append("text")
+						.text(title)
+						.attr("id", "color-scale-title")
+						.attr("x", 50).attr("y", 485)
+						.attr("fill", "#777")
+						.attr("font-size", "12");
+					
+					for (var i = 0; i < colors_array.length; i++) {
+						var xpos = 50 + 30*i;
+						var ypos = 450;
+						
+						enrollcs.append("rect")
+							.attr("x", xpos).attr("y", ypos + 5)
+							.attr("height", 14).attr("width",30)
+							.attr("id", "color-scale-rect-" + i)
+							.attr("fill", colors_array[i])
+							.style("opacity", 0.6);
+
+						var scaletext;
+						var scaletextcolor = "#a7a7a7";
+						var delta = (maxval - minval) / colors_array.length;
+						var val = minval + i * delta;
+						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : numberWithCommas(val);
+
+
+						enrollcs.append("text")
+							.text(scaletext)
+							.attr("x", xpos).attr("y", ypos)
+							.attr("fill", scaletextcolor)
+							.attr("font-size", 10)
+							.attr("id", "color-scale-label-" + i)
+							.attr("dominant-baseline", "middle")
+							.attr("transform", "rotate(-60," + xpos + ", " + ypos + ")");
+					}
+				}
+			}
+
 			/* Shade states based on unemployment data */
 			function color_states_unemployment () {
 				state_data.forEach(function(row){
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", unemployment_color_scale(row.unemploymentrate));
 				});
-
+				add_color_scale ("Unemployment Rate", unemployment_colors, min_unemploymentrate, max_unemploymentrate, "percent");
 			}
 
 			/* Shade states based on poverty rate data */
@@ -315,6 +335,7 @@
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", poverty_color_scale(row.povertyrate));
 				});
+				add_color_scale ("Poverty Rate", povertyrate_colors, min_povertyrate, max_povertyrate, "percent");
 
 			}
 
@@ -324,6 +345,7 @@
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", hiv_color_scale(row.hivaidsdiagnosisrate));
 				});
+				add_color_scale ("HIV/AIDS Infection Rate", hivaidsdiagnosisrate_colors, min_hivaidsdiagnosisrate, max_hivaidsdiagnosisrate, "percent");
 
 			}
 
@@ -333,6 +355,7 @@
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", hiv_death_color_scale(row.hivaidsmortality));
 				});
+				add_color_scale ("HIV/AIDS Death Rate", hivaidsmortality_colors, min_hivaidsmortality, max_hivaidsmortality, "percent");
 
 			}
 
