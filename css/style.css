@@ -1,0 +1,180 @@
+html {
+  	box-sizing: border-box;
+ 	background-color: #d1eaff;
+	background-image: url("../img/dark-tire.png");
+	font-family: sans-serif; 
+	font-size: 1.05em; 
+	line-height: 1.25; 
+}
+
+*, *:before, *:after {
+  	box-sizing: inherit;
+}
+
+body { 
+	width: 1000px; 
+	margin: 3em auto; 
+	font-family: "Roboto Slab"; 
+}
+
+.paper { 
+	width: 100%; 
+	background: #fff; 
+	border: 1px solid #cfcfcf; 
+	box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.2); 
+	font-family: "Montserrat"; 
+}
+
+.card { 
+	padding: 1.5em 2.5em; 
+	margin: 3em auto; 
+}
+
+.sheet { 
+	padding: 5em; 
+	margin: 3em auto; 
+}
+
+p { 
+	margin-bottom: 2em; 
+}
+
+small, .muted { 
+	color: #555; 
+}
+
+header { 
+	margin-bottom: 5em; 
+}
+
+.response { 
+	display: inline-block; 
+	line-height: 1.5; 
+	border-left: 3px solid #dfdfdf; 
+	padding: .5em 0 .5em 1.5em; 
+}
+
+.main-title { 
+	color: #444; 
+	font-size: 3.5em; 
+	text-align: center; 
+	margin: .5em auto; 
+	padding: 0; 
+	font-family: "Roboto Slab"; 
+}
+
+.sub-title { 
+	color: #555; 
+	font-size: 1.35em; 
+	line-height: 1.75; 
+	text-align: center; 
+	border-top: 1px solid #dfdfdf; 
+	padding-top: 1em; 
+}
+
+.section-title { 
+	color: #444; 
+	font-size: 3.5em; 
+	text-align: center; 
+	margin: 2em auto .5em auto; 
+	padding: 0; 
+}
+
+.no-bullet {
+	list-style-type: none;
+}
+
+.ul-horizontal {
+	text-align:center;
+	list-style-type: none;
+}
+
+.ul-horizontal li {
+	display: inline;
+}
+
+.map-select-button {
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #54381e;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:arial;
+	font-size:13px;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #4d3534;
+}
+
+#unemp-button {
+	background-color:#609732;
+}
+
+#poverty-button {
+	background-color:#2E4272;
+}
+
+#infect-button {
+	background-color:#AAAA39;
+}
+
+#deaths-button {
+	background-color:#AA3939;
+}
+
+.default { 
+	opacity:0.6;
+}
+
+.hover { 
+	opacity:0.8;
+}
+
+.selected { 
+	opacity:1.0;
+}
+
+#state-name {
+	font-family: Montserrat;
+	font-size: xx-large;
+	text-align:center;
+	dominant-baseline:middle;
+	padding: 1% 0% 1% 0%;
+	margin: 0% 5% 0% 5%;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+#state-details {
+	font-family: Montserrat;
+	padding: 1% 1% 1% 1%;
+}
+
+#demog-data {
+	width:50%;
+	float:left;
+}
+
+#hiv-data {
+	width:50%;
+	float:right;
+}
+
+.state-data-element {
+
+
+}
+
+.state-data-element svg line {
+	stroke:black;
+	stroke-width: 2px;
+}
+
+.left-float {
+	float: left;
+}
+
+.right-float {
+	float: right;
+}
