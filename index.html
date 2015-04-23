@@ -253,6 +253,7 @@
 				
 				//start by showing unemployment on map
 				color_states_unemployment();
+				var linecolor = unemployment_colors[2];
 				//start by showing whole US data on map
 				switch_to_state(-1);
 				
@@ -327,6 +328,7 @@
 						.attr("fill", unemployment_color_scale(row.unemploymentrate));
 				});
 				add_color_scale ("Unemployment Rate", unemployment_colors, min_unemploymentrate, max_unemploymentrate, "percent");
+				linecolor = unemployment_colors[2];
 			}
 
 			/* Shade states based on poverty rate data */
@@ -336,7 +338,7 @@
 						.attr("fill", poverty_color_scale(row.povertyrate));
 				});
 				add_color_scale ("Poverty Rate", povertyrate_colors, min_povertyrate, max_povertyrate, "percent");
-
+				linecolor = povertyrate_colors[0];
 			}
 
 			/* Shade states based on HIV data */
@@ -347,6 +349,7 @@
 				});
 				add_color_scale ("HIV/AIDS Infection Rate", hivaidsdiagnosisrate_colors, min_hivaidsdiagnosisrate, max_hivaidsdiagnosisrate, "percent");
 
+				linecolor=hivaidsdiagnosisrate_colors[2];
 			}
 
 			/* Shade states based on HIV death data */
@@ -356,6 +359,7 @@
 						.attr("fill", hiv_death_color_scale(row.hivaidsmortality));
 				});
 				add_color_scale ("HIV/AIDS Death Rate", hivaidsmortality_colors, min_hivaidsmortality, max_hivaidsmortality, "percent");
+				linecolor=hivaidsmortality_colors[1];
 
 			}
 
@@ -479,7 +483,8 @@
 					.attr("y1",(svg_dim.height / 3) + data_bar_dim.height / 2)
 					.attr("x2",data_scale(+val))
 					.attr("y2",(svg_dim.height / 3) - data_bar_dim.height / 2)
-					.style("stroke-width", "3px");
+					.style("stroke-width", "3px")
+					.style("stroke", linecolor);
 
 				//display minval
 				var minval_text = (percentorraw == "percent") ? tp(+minval * 100) + "%" : numberWithCommas(minval);
@@ -509,7 +514,7 @@
 					.attr("y", svg_dim.height * 2 / 3)
 					.attr("text-anchor", "middle")
 					.attr("font-size", 14)
-					.attr("fill", "#070707")
+					.attr("fill", linecolor)
 					.style("font-weight", "bold");
 			}
 			
