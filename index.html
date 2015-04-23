@@ -434,7 +434,7 @@
 					//display aggregate US data
 					d3.select("#state-name").text("United States");
 					append_svg_with_parameters("#unemploymentrate", "Unemployment Rate", us_data.unemploymentrate, min_unemploymentrate, max_unemploymentrate, avg_unemploymentrate, "percent");
-					append_svg_with_parameters("#povertyrate", "Poverty Rate", us_data.povertyrate, min_povertyrate, max_povertyrate, avg_povertyrate, "raw");
+					append_svg_with_parameters("#povertyrate", "Poverty Rate", us_data.povertyrate, min_povertyrate, max_povertyrate, avg_povertyrate, "percent");
 					append_svg_with_parameters("#medianincome", "Median Income", us_data.medianincome, min_medianincome, max_medianincome, avg_medianincome, "raw");
 					append_svg_with_parameters("#foodstamprecipients", "Percentage on Food Stamps", us_data.foodstamprecipients, min_foodstamprecipients, max_foodstamprecipients, avg_foodstamprecipients, "percent");
 					append_svg_with_parameters("#hivaidsdiagnosisrate", "HIV/AIDS Diagnosis Rate", us_data.hivaidsdiagnosisrate, min_hivaidsdiagnosisrate, max_hivaidsdiagnosisrate, avg_hivaidsdiagnosisrate, "percent");
@@ -450,7 +450,7 @@
 					});
 					d3.select("#state-name").text(id_to_state(state_id));
 					append_svg_with_parameters("#unemploymentrate", "Unemployment Rate", current_state.unemploymentrate, min_unemploymentrate, max_unemploymentrate, avg_unemploymentrate, "percent");
-					append_svg_with_parameters("#povertyrate", "Poverty Rate", current_state.povertyrate, min_povertyrate, max_povertyrate, avg_povertyrate, "raw");
+					append_svg_with_parameters("#povertyrate", "Poverty Rate", current_state.povertyrate, min_povertyrate, max_povertyrate, avg_povertyrate, "percent");
 					append_svg_with_parameters("#medianincome", "Median Income", current_state.medianincome, min_medianincome, max_medianincome, avg_medianincome, "raw");
 					append_svg_with_parameters("#foodstamprecipients", "Percentage on Food Stamps", current_state.foodstamprecipients, min_foodstamprecipients, max_foodstamprecipients, avg_foodstamprecipients, "percent");
 					append_svg_with_parameters("#hivaidsdiagnosisrate", "HIV/AIDS Diagnosis Rate", current_state.hivaidsdiagnosisrate, min_hivaidsdiagnosisrate, max_hivaidsdiagnosisrate, avg_hivaidsdiagnosisrate, "percent");
