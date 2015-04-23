@@ -154,11 +154,13 @@ header {
 #demog-data {
 	width:50%;
 	float:left;
+	padding-right: 5%;
 }
 
 #hiv-data {
 	width:50%;
 	float:right;
+	padding-right: 5%;
 }
 
 .state-data-element {
