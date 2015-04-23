@@ -7,6 +7,8 @@
     ================================================== -->
     <script src="d3.v3.min.js" charset="utf-8"></script>
     <script src="topojson.v1.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.scrollintoview.min.js"></script>
     
     <!-- Basic Page Styles
     ================================================== -->
@@ -363,7 +365,10 @@
 					append_svg_with_parameters("#hivaidsdiagnosisrate", "HIV/AIDS Diagnosis Rate", current_state.hivaidsdiagnosisrate, min_hivaidsdiagnosisrate, max_hivaidsdiagnosisrate, avg_hivaidsdiagnosisrate, "percent");
 					append_svg_with_parameters("#hivaidsmortality", "HIV/AIDS Death Rate", current_state.hivaidsmortality, min_hivaidsmortality, max_hivaidsmortality, avg_hivaidsmortality, "percent");
 
-
+					var element = document.getElementById("state-panel");
+					$(element).scrollintoview({
+    					duration: "normal",
+					});
 				}
 			}
 
