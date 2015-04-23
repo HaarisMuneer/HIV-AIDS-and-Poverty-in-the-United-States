@@ -87,6 +87,7 @@ header {
 .ul-horizontal {
 	text-align:center;
 	list-style-type: none;
+	padding-right: 4%;
 }
 
 .ul-horizontal li {
