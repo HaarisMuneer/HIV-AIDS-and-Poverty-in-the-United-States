@@ -474,6 +474,13 @@
 					.attr("fill", "gray")
 					.style("opacity", 0.5);
 
+				svg.append("text")
+					.attr("x", data_scale(+avgval) - avg_bar_dim.width / 2)
+					.attr("y", (svg_dim.height / 3) - avg_bar_dim.height / 2)
+					.text("Average")
+					.attr("font-size", "57%")
+					.attr("fill", "black");
+
 				//actual value on base line
 				svg.append("line")
 					.attr("x1",data_scale(+val))
