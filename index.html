@@ -290,7 +290,7 @@
 						var scaletextcolor = (i % 2 == 0)? "#a7a7a7" : "#dfdfdf";
 						var delta = (maxval - minval) / colors_array.length;
 						var val = minval + i * delta;
-						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : numberWithCommas(val);
+						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : "$" + numberWithCommas(val);
 						d3.select("#color-scale-label-"+i).text(scaletext);
 					}
 				}
@@ -320,7 +320,7 @@
 						var scaletextcolor = "#a7a7a7";
 						var delta = (maxval - minval) / colors_array.length;
 						var val = minval + i * delta;
-						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : numberWithCommas(val);
+						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : "$" + numberWithCommas(val);
 
 
 						enrollcs.append("text")
@@ -503,7 +503,7 @@
 					.style("stroke", "#000");
 
 				//display minval
-				var minval_text = (percentorraw == "percent") ? tp(+minval * 100) + "%" : numberWithCommas(minval);
+				var minval_text = (percentorraw == "percent") ? tp(+minval * 100) + "%" : "$" + numberWithCommas(minval);
 				svg.append("text")
 					.text(minval_text)
 					.attr("x", data_scale(+minval))
@@ -513,7 +513,7 @@
 					.attr("fill", "#000");
 
 				//display maxval
-				var maxval_text = (percentorraw == "percent") ? tp(+maxval * 100) + "%" : numberWithCommas(maxval);
+				var maxval_text = (percentorraw == "percent") ? tp(+maxval * 100) + "%" : "$" + numberWithCommas(maxval);
 				svg.append("text")
 					.text(maxval_text)
 					.attr("x", data_scale(+maxval))
@@ -523,7 +523,7 @@
 					.attr("fill", "#000");
 
 				//display val
-				var val_text = (percentorraw == "percent") ? tp(+val * 100) + "%" : numberWithCommas(val);
+				var val_text = (percentorraw == "percent") ? tp(+val * 100) + "%" : "$" + numberWithCommas(val);
 				svg.append("text")
 					.text(val_text)
 					.attr("x", svg_dim.width / 2)
