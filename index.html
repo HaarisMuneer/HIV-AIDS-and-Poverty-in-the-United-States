@@ -612,7 +612,10 @@
 					gravity: "w",
 					html: true,
 					title: function () {
-						return id_to_state(this.__data__.id);
+						var tip = id_to_state(this.__data__.id);
+						tip += ": " + (this.__data__.x * 100).toPrecision(2) + "% poverty";
+						tip += ", " + Math.ceil(this.__data__.y) + " diagnosis rate";
+						return tip;
 					}
 				});
 
