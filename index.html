@@ -39,7 +39,7 @@
 		<h2 class="section-title">Overview Map</h2>
 		<div id="map" class="paper">
 			<p class = "description">
-				Use the buttons below to sort the map according to the respective labels. Click on an individual state to see more specific data about it. Click in the whitespace to view aggregate US data.
+				Use the buttons below to color the map according to the respective labels. Click on an individual state to see more specific data about it. Click in the whitespace to view aggregate US data.
 			</p>
 			<ul class="no-bullet ul-horizontal">
 				<li>
@@ -612,8 +612,7 @@
 					gravity: "w",
 					html: true,
 					title: function () {
-						var state = id_to_state(this.__data__.id);
-						return state;
+						return id_to_state(this.__data__.id);
 					}
 				});
 
