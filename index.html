@@ -9,11 +9,13 @@
     <script src="topojson.v1.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery.scrollintoview.min.js"></script>
+    <script type="text/javascript" src="jquery.tipsy.js"></script>
     
     <!-- Basic Page Styles
     ================================================== -->
 	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto+Slab:400,700' rel='stylesheet' type='text/css' />
 	<link href='css/style.css' rel='stylesheet' type='text/css' />
+	<link href="css/tipsy.css" rel="stylesheet" type="text/css"/>
     
 </head>
 <body>
@@ -85,7 +87,7 @@
 		<h2 class="section-title">Trendline</h2>
 		<div id="plot" class="paper">
 			<p class="description">
-				This graph plots HIV/AIDS diagnosis rate against poverty rate.
+				This graph demonstrates the positive correlation between Poverty and HIV/AIDS <br/> <small style="opacity:0.5">hover to reveal state</small>
 			</p>
 		</div>
 
@@ -269,7 +271,7 @@
 				//start by showing whole US data on map
 				switch_to_state(-1);
 				
-				dostuff();
+				draw_trendline();
 				
 			});
 
@@ -536,84 +538,113 @@
 
 		<script>
 
-		function dostuff () {
+		function draw_trendline () {
 
-		var height = 500;
-		var width = 809;
+			var height = 500;
+			var width = 900;
 
-		var padding = 
-			{
-				top: 50,
-				right: 50,
-				bottom: 50,
-				left: 100
-			};
-
-		var svg = d3.select("#plot").append("svg")
-		.attr("height", height)
-		.attr("width", width);
-
-		var xScale = d3.scale.linear().domain([0, max_povertyrate]).range([padding.left, width - padding.right]);
-		var yScale = d3.scale.linear().domain([0, max_hivaidsdiagnosisrate * 100000]).range([height - padding.bottom, padding.top]);
-
-		var xAxis = d3.svg.axis().scale(xScale);
-		svg.append("g")
-		  .attr("class", "axis")
-		  .attr("transform", "translate(0, " + (height - padding.bottom) + ")")
-		  .call(xAxis);
-
-		var yAxis = d3.svg.axis().scale(yScale).orient("left");
-		svg.append("g")
-			.attr("class", "axis")
-			.attr("transform", "translate(" + padding.left + ", 0)")
-			.call(yAxis);
-
-		var points = [];
-
-		for (var i = 0; i < state_data.length; i++) {
-			points.push( 
+			var padding = 
 				{
-					x: state_data[i].povertyrate,
-					y: state_data[i].hivaidsdiagnosisrate * 100000,
-					id: state_to_id(state_data[i].state)
+					top: 50,
+					right: 50,
+					bottom: 75,
+					left: 150
+				};
+
+			var svg = d3.select("#plot").append("svg")
+				.attr("height", height)
+				.attr("width", width);
+
+			//add axis labels
+			//x axis label
+			svg.append("text")
+				.attr("x", width / 2)
+				.attr("y", height - (padding.bottom / 3))
+				.style("text-align", "center")
+				.style("dominant-baseline", "center")
+				.text("Poverty Rate");
+			//y axis label
+			svg.append("text")
+				.attr("x", padding.left / 2)
+				.attr("y", height / 2)
+				.attr("transform", "rotate(-90," + padding.left / 2 + "," + height / 2  + ")"
+					+ " translate(-140,0)") //hax
+				.style("text-align", "center")
+				.style("dominant-baseline", "center")
+				.text("HIV/AIDS Diagnosis Rate (per 100,000)");
+
+			var xScale = d3.scale.linear().domain([0, max_povertyrate]).range([padding.left, width - padding.right]);
+			var yScale = d3.scale.linear().domain([0, max_hivaidsdiagnosisrate * 100000]).range([height -padding.bottom, padding.top]);
+
+			var xAxis = d3.svg.axis().scale(xScale);
+			svg.append("g")
+			  .attr("class", "axis")
+			  .attr("transform", "translate(0, " + (height - padding.bottom) + ")")
+			  .call(xAxis);
+
+			var yAxis = d3.svg.axis().scale(yScale).orient("left");
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(" + padding.left + ", 0)")
+				.call(yAxis);
+
+			var points = [];
+
+			for (var i = 0; i < state_data.length; i++) {
+				points.push( 
+					{
+						x: state_data[i].povertyrate,
+						y: state_data[i].hivaidsdiagnosisrate * 100000,
+						id: state_to_id(state_data[i].state)
+					});
+			}
+			var circles = svg.selectAll("circle").data(points).enter()
+				.append("circle")
+				.attr("cx", function (d) { return xScale(d.x); })
+				.attr("cy", function (d) { return yScale(d.y); })
+				.attr("r", 5)
+				.attr("class", function (d) { return "point-state-" + d.id; })
+				.style("opacity", "0.6");
+
+			//enable hovering tooltips -- display state name
+			$("svg circle").tipsy(
+				{
+					gravity: "w",
+					html: true,
+					title: function () {
+						var state = id_to_state(this.__data__.id);
+						return state;
+					}
 				});
-		}
-		var circles = svg.selectAll("circle").data(points).enter()
-		.append("circle")
-		.attr("cx", function (d) { return xScale(d.x); })
-		.attr("cy", function (d) { return yScale(d.y); })
-		.attr("r", 4)
-		.attr("class", function (d) { return "point-state-" + d.id; })
-		.style("opacity", "0.6");
 
-		// Calculate the slope and intercept.
-			
-		var model = {};
+			// Calculate the slope and intercept.
+				
+			var model = {};
 
-		var meanX = d3.mean(points, function (d) { 
-			return d.x;
-		});
+			var meanX = d3.mean(points, function (d) { 
+				return d.x;
+			});
 
-		var meanY = d3.mean(points, function (d) { 
-			return d.y;
-		});
+			var meanY = d3.mean(points, function (d) { 
+				return d.y;
+			});
 
-		model.slope = d3.sum(points, function (d) {
-			return (d.x - meanX) * (d.y - meanY);
-		});
+			model.slope = d3.sum(points, function (d) {
+				return (d.x - meanX) * (d.y - meanY);
+			});
 
-		model.slope /= d3.sum(points, function (d) {
-			return (d.x - meanX) * (d.x - meanX);
-		});
+			model.slope /= d3.sum(points, function (d) {
+				return (d.x - meanX) * (d.x - meanX);
+			});
 
-		model.intercept = meanY - model.slope * meanX;
-			
-		var regressionLine = svg.append("line")
-		.attr("x1", xScale(-3))
-		.attr("y1", yScale(model.slope * -3 + model.intercept))
-		.attr("x2", xScale(3))
-		.attr("y2", yScale(model.slope * 3 + model.intercept))
-		.style("stroke", "#993333");
+			model.intercept = meanY - model.slope * meanX;
+				
+			var regressionLine = svg.append("line")
+				.attr("x1", xScale(min_povertyrate - 0.02))
+				.attr("y1", yScale(model.slope * (min_povertyrate - 0.02) + model.intercept))
+				.attr("x2", xScale(max_povertyrate + 0.02))
+				.attr("y2", yScale(model.slope * (max_povertyrate + 0.02) + model.intercept))
+				.style("stroke", "#993333");
 
 		}
 
