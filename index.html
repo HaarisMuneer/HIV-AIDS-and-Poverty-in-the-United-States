@@ -481,7 +481,7 @@
 					.attr("x2",data_scale(+val))
 					.attr("y2",(svg_dim.height / 3) - data_bar_dim.height / 2)
 					.style("stroke-width", "3px")
-					.style("stroke", "a7a7a7");
+					.style("stroke", "#000");
 
 				//display minval
 				var minval_text = (percentorraw == "percent") ? tp(+minval * 100) + "%" : numberWithCommas(minval);
@@ -491,7 +491,7 @@
 					.attr("y", (svg_dim.height / 3) + 1.5 * data_bar_dim.height)
 					.attr("text-anchor", "middle")
 					.attr("font-size", 12)
-					.attr("fill: #a7a7a7");
+					.attr("fill", "#000");
 
 				//display maxval
 				var maxval_text = (percentorraw == "percent") ? tp(+maxval * 100) + "%" : numberWithCommas(maxval);
@@ -501,7 +501,7 @@
 					.attr("y", (svg_dim.height / 3) + 1.5 * data_bar_dim.height)
 					.attr("text-anchor", "middle")
 					.attr("font-size", 12)
-					.attr("fill: #a7a7a7");
+					.attr("fill", "#000");
 
 				//display val
 				var val_text = (percentorraw == "percent") ? tp(+val * 100) + "%" : numberWithCommas(val);
@@ -511,7 +511,7 @@
 					.attr("y", svg_dim.height * 2 / 3)
 					.attr("text-anchor", "middle")
 					.attr("font-size", 14)
-					.attr("fill", "a7a7a7")
+					.attr("fill", "#000")
 					.style("font-weight", "bold");
 			}
 			
