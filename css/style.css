@@ -87,6 +87,7 @@ header {
 .ul-horizontal {
 	text-align:center;
 	list-style-type: none;
+	padding-right: 2%;
 }
 
 .ul-horizontal li {
@@ -124,7 +125,7 @@ header {
 	background-color:#AA3939;
 }
 
-.default { 
+.default {
 	opacity:0.6;
 }
 
@@ -163,11 +164,6 @@ header {
 	padding-right: 5%;
 }
 
-.state-data-element {
-
-
-}
-
 .state-data-element svg line {
 	stroke:black;
 	stroke-width: 2px;
@@ -179,4 +175,13 @@ header {
 
 .right-float {
 	float: right;
+}
+
+.description{
+	margin-left: 10%; 
+	margin-right: 10%;
+	margin-top: 3%; 
+	margin-bottom: 3%: 
+	font-size: 90%;
+	text-align: center;
 }

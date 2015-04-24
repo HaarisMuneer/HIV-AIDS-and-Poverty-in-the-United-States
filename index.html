@@ -34,6 +34,9 @@
 	<section>
 		<h2 class="section-title">Overview Map</h2>
 		<div id="map" class="paper">
+			<p class = "description">
+				Use the buttons below to sort the map according to the respective labels. Click on an individual state to see more specific data about it.
+			</p>
 			<ul class="no-bullet ul-horizontal">
 				<li>
 					<button onclick="color_states_unemployment()" class="map-select-button" id="unemp-button">Unemployment Rate</button>
@@ -108,6 +111,8 @@
 			var usaData;
 			var statePaths;
 			var statesData;
+
+			var enrollcs
 
 			var states;
 
@@ -249,52 +254,9 @@
 					});
 					
 				
-				/* Show enrollment color scale key on map */
-				
-				enrollcs = map_svg.append("g");
-				
-				enrollcs.append("text")
-					.text("Map Scale Description")
-					.attr("x", 50).attr("y", 600)
-					.attr("fill", "#777")
-					.attr("font-size", "12");
-				
-				for (var i = 0; i < 5; i++) {
-					var xpos = 50 + 30*i;
-					var ypos = 560;
-					
-					enrollcs.append("rect")
-						.attr("x", xpos).attr("y", ypos + 5)
-						.attr("height", 14).attr("width",30)
-						.attr("fill", unemployment_colors[i]);
-
-					var scaletext;
-					var scaletextcolor = (i % 2 == 0)? "#a7a7a7" : "#dfdfdf";
-					if (i == 0) {
-						scaletext = "0%";
-					}
-					else if (i < 5) {
-						scaletext = "0." + (i * 2) + "%";
-					}
-					else if (i == 5) {
-						scaletext = "1%";
-					}
-					else {
-						scaletext = (2 + 2 * (i - 6)) + "%";
-					}
-
-					enrollcs.append("text")
-						.text(scaletext)
-						.attr("x", xpos).attr("y", ypos)
-						.attr("fill", scaletextcolor)
-						.attr("font-size", 10)
-						.attr("dominant-baseline", "middle")
-						.attr("transform", "rotate(-60," + xpos + ", " + ypos + ")");
-				}
 				
 				//start by showing unemployment on map
 				color_states_unemployment();
-				var linecolor = unemployment_colors[2];
 				//start by showing whole US data on map
 				switch_to_state(-1);
 				
@@ -302,14 +264,73 @@
 				
 			});
 
+			function add_color_scale (title, colors_array, minval, maxval, percentorraw) {
+				/* Show enrollment color scale key on map */
+
+				
+				if (enrollcs) {
+					d3.select("#color-scale-title").text(title);
+					//update colors
+					for (var i = 0; i < colors_array.length; i++) {
+						d3.select("#color-scale-rect-" + i)
+							.attr("fill", colors_array[i]);
+
+						var scaletext;
+						var scaletextcolor = (i % 2 == 0)? "#a7a7a7" : "#dfdfdf";
+						var delta = (maxval - minval) / colors_array.length;
+						var val = minval + i * delta;
+						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : numberWithCommas(val);
+						d3.select("#color-scale-label-"+i).text(scaletext);
+					}
+				}
+				else {
+
+					enrollcs = map_svg.append("g");
+					
+					enrollcs.append("text")
+						.text(title)
+						.attr("id", "color-scale-title")
+						.attr("x", 50).attr("y", 485)
+						.attr("fill", "#777")
+						.attr("font-size", "12");
+					
+					for (var i = 0; i < colors_array.length; i++) {
+						var xpos = 50 + 30*i;
+						var ypos = 450;
+						
+						enrollcs.append("rect")
+							.attr("x", xpos).attr("y", ypos + 5)
+							.attr("height", 14).attr("width",30)
+							.attr("id", "color-scale-rect-" + i)
+							.attr("fill", colors_array[i])
+							.style("opacity", 0.6);
+
+						var scaletext;
+						var scaletextcolor = "#a7a7a7";
+						var delta = (maxval - minval) / colors_array.length;
+						var val = minval + i * delta;
+						scaletext = percentorraw == "percent" ? tp(val * 100) + "%" : numberWithCommas(val);
+
+
+						enrollcs.append("text")
+							.text(scaletext)
+							.attr("x", xpos).attr("y", ypos)
+							.attr("fill", scaletextcolor)
+							.attr("font-size", 10)
+							.attr("id", "color-scale-label-" + i)
+							.attr("dominant-baseline", "middle")
+							.attr("transform", "rotate(-60," + xpos + ", " + ypos + ")");
+					}
+				}
+			}
+
 			/* Shade states based on unemployment data */
 			function color_states_unemployment () {
 				state_data.forEach(function(row){
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", unemployment_color_scale(row.unemploymentrate));
 				});
-				linecolor = unemployment_colors[2];
-
+				add_color_scale ("Unemployment Rate", unemployment_colors, min_unemploymentrate, max_unemploymentrate, "percent");
 			}
 
 			/* Shade states based on poverty rate data */
@@ -318,7 +339,7 @@
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", poverty_color_scale(row.povertyrate));
 				});
-				linecolor = povertyrate_colors[0];
+				add_color_scale ("Poverty Rate", povertyrate_colors, min_povertyrate, max_povertyrate, "percent");
 			}
 
 			/* Shade states based on HIV data */
@@ -327,7 +348,7 @@
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", hiv_color_scale(row.hivaidsdiagnosisrate));
 				});
-				linecolor=hivaidsdiagnosisrate_colors[2];
+				add_color_scale ("HIV/AIDS Infection Rate", hivaidsdiagnosisrate_colors, min_hivaidsdiagnosisrate, max_hivaidsdiagnosisrate, "percent");
 			}
 
 			/* Shade states based on HIV death data */
@@ -336,7 +357,7 @@
 					map_svg.select(".state-" + state_to_id(row.state))
 						.attr("fill", hiv_death_color_scale(row.hivaidsmortality));
 				});
-				linecolor=hivaidsmortality_colors[1];
+				add_color_scale ("HIV/AIDS Death Rate", hivaidsmortality_colors, min_hivaidsmortality, max_hivaidsmortality, "percent");
 
 			}
 
@@ -454,6 +475,13 @@
 					.attr("fill", "gray")
 					.style("opacity", 0.5);
 
+				svg.append("text")
+					.attr("x", data_scale(+avgval) - avg_bar_dim.width / 2)
+					.attr("y", (svg_dim.height / 3) - avg_bar_dim.height / 2)
+					.text("Average")
+					.attr("font-size", "57%")
+					.attr("fill", "black");
+
 				//actual value on base line
 				svg.append("line")
 					.attr("x1",data_scale(+val))
@@ -461,7 +489,7 @@
 					.attr("x2",data_scale(+val))
 					.attr("y2",(svg_dim.height / 3) - data_bar_dim.height / 2)
 					.style("stroke-width", "3px")
-					.style("stroke", linecolor);
+					.style("stroke", "#000");
 
 				//display minval
 				var minval_text = (percentorraw == "percent") ? tp(+minval * 100) + "%" : numberWithCommas(minval);
@@ -471,7 +499,7 @@
 					.attr("y", (svg_dim.height / 3) + 1.5 * data_bar_dim.height)
 					.attr("text-anchor", "middle")
 					.attr("font-size", 12)
-					.attr("fill: #a7a7a7");
+					.attr("fill", "#000");
 
 				//display maxval
 				var maxval_text = (percentorraw == "percent") ? tp(+maxval * 100) + "%" : numberWithCommas(maxval);
@@ -481,7 +509,7 @@
 					.attr("y", (svg_dim.height / 3) + 1.5 * data_bar_dim.height)
 					.attr("text-anchor", "middle")
 					.attr("font-size", 12)
-					.attr("fill: #a7a7a7");
+					.attr("fill", "#000");
 
 				//display val
 				var val_text = (percentorraw == "percent") ? tp(+val * 100) + "%" : numberWithCommas(val);
@@ -491,7 +519,7 @@
 					.attr("y", svg_dim.height * 2 / 3)
 					.attr("text-anchor", "middle")
 					.attr("font-size", 14)
-					.attr("fill", linecolor)
+					.attr("fill", "#000")
 					.style("font-weight", "bold");
 			}
 			
